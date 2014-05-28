@@ -119,7 +119,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PlayersController.cs" />
+    <Compile Include="Controllers\TournamentsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -151,6 +154,14 @@
     <Compile Include="Migrations\201405261801492_not too usre....cs" />
     <Compile Include="Migrations\201405261801492_not too usre....Designer.cs">
       <DependentUpon>201405261801492_not too usre....cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405280212388_Added Name to Tourny.cs" />
+    <Compile Include="Migrations\201405280212388_Added Name to Tourny.Designer.cs">
+      <DependentUpon>201405280212388_Added Name to Tourny.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405280319516_rollback on that.cs" />
+    <Compile Include="Migrations\201405280319516_rollback on that.Designer.cs">
+      <DependentUpon>201405280319516_rollback on that.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Event.cs" />
@@ -193,6 +204,21 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Events\Create.cshtml" />
+    <Content Include="Views\Events\Delete.cshtml" />
+    <Content Include="Views\Events\Details.cshtml" />
+    <Content Include="Views\Events\Edit.cshtml" />
+    <Content Include="Views\Events\Index.cshtml" />
+    <Content Include="Views\Tournaments\Create.cshtml" />
+    <Content Include="Views\Tournaments\Delete.cshtml" />
+    <Content Include="Views\Tournaments\Details.cshtml" />
+    <Content Include="Views\Tournaments\Edit.cshtml" />
+    <Content Include="Views\Tournaments\Index.cshtml" />
+    <Content Include="Views\Players\Create.cshtml" />
+    <Content Include="Views\Players\Delete.cshtml" />
+    <Content Include="Views\Players\Details.cshtml" />
+    <Content Include="Views\Players\Edit.cshtml" />
+    <Content Include="Views\Players\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201405260306527_Initial.resx">
@@ -215,6 +241,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405261801492_not too usre....resx">
       <DependentUpon>201405261801492_not too usre....cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405280212388_Added Name to Tourny.resx">
+      <DependentUpon>201405280212388_Added Name to Tourny.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405280319516_rollback on that.resx">
+      <DependentUpon>201405280319516_rollback on that.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

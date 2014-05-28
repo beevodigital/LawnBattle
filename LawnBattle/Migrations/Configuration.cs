@@ -20,7 +20,7 @@ namespace LawnBattle.Migrations
             var ThisEvent = new Event { Name = "Seed Event" };
             context.Events.Add(ThisEvent);
 
-            context.SaveChanges();
+            //context.SaveChanges();
 
             //lets add 6 players to this event
             //we always have to have an even number of players
@@ -34,7 +34,7 @@ namespace LawnBattle.Migrations
                 new Player{Name = "Marc",Event = ThisEvent}
             };
             Players.ForEach(s => context.Players.Add(s));
-            context.SaveChanges();
+            //context.SaveChanges();
 
             //next we need to create a tournament
             //eventually, we will ask if this is a bracket or round robin

@@ -8,7 +8,7 @@ namespace LawnBattle.Helpers
 {
     public class TeamHelper
     {
-        public void CreateRandomTeams(List<Player> HumanPlayers)
+        public List<LawnBattle.Models.Team> CreateRandomTeams(List<Player> HumanPlayers)
         {
             List<LawnBattle.Models.Team> HumanTeams = new List<LawnBattle.Models.Team>();
             List<LawnBattle.Models.Team> FakeTeams = new List<LawnBattle.Models.Team>();
@@ -31,6 +31,11 @@ namespace LawnBattle.Helpers
                 HumanPlayers.RemoveAt(0);
                 HumanTeams.Add(ThisTeam);
             }
+
+
+            //*************************** returnin teams. more good code below for creating fake teams and games. Will get pulled out later.
+            return HumanTeams;
+
 
 
             //at this point, we have teams! now we need to figure out our fake teams:

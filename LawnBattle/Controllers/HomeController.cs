@@ -23,6 +23,11 @@ namespace LawnBattle.Controllers
             return View();
         }
 
+        public ActionResult TestEvent()
+        {
+            return View();
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
