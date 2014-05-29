@@ -5,6 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    #minimal .label {
+        color: black;
+    }
+</style>
+
+
+
 <h2>Details</h2>
 
 <h3>Are you sure you want to delete this?</h3>
@@ -37,8 +45,8 @@
                 {
                     <li>@ThisTeam.Name</li>
                     <ul>
-                        <li>@ThisTeam.Player1.Name</li>
-                        <li>@ThisTeam.Player2.Name</li>
+                        <li>@(ThisTeam.Player1 != null ? ThisTeam.Player1.Name : "Bye")</li>
+                        <li>@(ThisTeam.Player2 != null ? ThisTeam.Player2.Name : "Bye")</li>
                     </ul>
                 }
             }
@@ -54,4 +62,65 @@
             @Html.ActionLink("Back to List", "Index")
         </div>
     }
+</div>
+<div id="minimal">
+    <script>
+        $(document).ready(function () {
+            // Handler for .ready() called.
+            var minimalData = {
+                teams: [
+                    @{
+                        int LoopCounter = 0;
+                        int firstRoundSize = (Model.Teams.Count / 2);
+                        foreach(var ThisGame in Model.Games.Take(firstRoundSize))
+                        {
+                            //turnung out to be more work than anticipated
+                            string Team1 = "null";
+                            string Team2 = "null";
+                            string TempBuilder = "";
+                            
+                            //create Team1
+                            TempBuilder = "[";
+                            //make sure Team1 is valid
+                            if(ThisGame.Team1 != null && ThisGame.Team1.Player1 != null && ThisGame.Team1.Player2 != null)
+                            {
+                                TempBuilder += "\"" + ThisGame.Team1.Player1.Name + " / " + ThisGame.Team1.Player2.Name + "\",";
+                            }
+                            else
+                            {
+                                TempBuilder += "\" \",";
+                            }
+
+                            if (ThisGame.Team2 != null && ThisGame.Team2.Player1 != null && ThisGame.Team2.Player2 != null)
+                            {
+                                TempBuilder += "\"" + ThisGame.Team2.Player1.Name + " / " + ThisGame.Team2.Player2.Name + "\"]";
+                            }
+                            else
+                            {
+                                TempBuilder += "\" \"]";
+                            }
+                            
+                            //do we need a comma at the end?
+                            if ((LoopCounter + 1) < Model.Games.Take(firstRoundSize).Count())
+                                {
+                                TempBuilder += ",";
+                                }
+                            LoopCounter++;
+                            
+                            @Html.Raw(TempBuilder);
+                            
+                        }
+                        
+                    }
+                ], results: [[[[1, 0], [1, 0], [1, 0], [0,1]]]]
+            }
+
+            $(function () {
+                $('#minimal').bracket({
+                    init: minimalData /* data to initialize the bracket with */
+                })
+            })
+        });
+    </script>
+    
 </div>

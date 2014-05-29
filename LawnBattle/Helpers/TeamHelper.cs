@@ -125,5 +125,84 @@ namespace LawnBattle.Helpers
             }
              */
         }
+        
+        public List<LawnBattle.Models.Team> CreateFakeTeams(int NumberOfTemas)
+        {
+            List<LawnBattle.Models.Team> FakeTeams = new List<Team>();
+
+            if (NumberOfTemas > 0)
+            {
+                for (int i = 0; i < NumberOfTemas; i++)
+                {
+                    Team ThisTeam = new Team { IsHuman = false };
+                    FakeTeams.Add(ThisTeam);
+                }
+            }
+
+            return FakeTeams;
+        }
+
+        public List<Game> EliminationCreateGames(List<Team> HumanTeams, List<Team> FakeTeams, int BracketSize)
+        {
+            //we need to create our first round games
+            //BracketSize / 2
+            //Populate those with real teams
+            List<Game> TheseGames = new List<Game>();
+            int ThisGameCounter = 0;
+
+            for (int i = 0; i < BracketSize; i++ )
+            {
+                if(i < (BracketSize / 2))
+                {
+                    //creating real games
+                    //creat the teams. 
+                    Game ThisGame = new Game();
+                    //are there humans for team 1?
+                    if (HumanTeams.Count > 0)
+                    {
+                        ThisGame.Team1 = HumanTeams.ElementAt(0);
+                        HumanTeams.RemoveAt(0);
+                    }
+                    else if (FakeTeams.Count > 0)
+                    {
+                        ThisGame.Team1 = FakeTeams.ElementAt(0);
+                        FakeTeams.RemoveAt(0);
+                    }
+
+                    //for team 2, we want to fill with fakes if possible
+                    if (FakeTeams.Count > 0)
+                    {
+                        ThisGame.Team2 = FakeTeams.ElementAt(0);
+                        FakeTeams.RemoveAt(0);
+                    }
+                    else if (HumanTeams.Count > 0)
+                    {
+                        ThisGame.Team2 = HumanTeams.ElementAt(0);
+                        HumanTeams.RemoveAt(0);
+                    }
+
+                    TheseGames.Insert(ThisGameCounter, ThisGame);
+                    if (i % 2 == 0)
+                        ThisGameCounter++;
+                    string stopHere = "";
+                }
+                else
+                {
+                    //creating empty games
+                    Game ThisEmptyGame = new Game();
+                    TheseGames.Add(ThisEmptyGame);
+                }
+                //Number the game slots
+                int GameCounter = 0;
+                foreach(var ThisGame in TheseGames)
+                {
+                    ThisGame.GameSlot = GameCounter;
+                    GameCounter++;
+                }
+            }
+
+                //after that create empties
+            return TheseGames;
+        }
     }
 }

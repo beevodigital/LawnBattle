@@ -66,18 +66,70 @@ namespace LawnBattle.Controllers
                 //2) create games
 
                 //make teams (this will only make REAL teams):
-                var GetPlayers = db.Players.Where(x => x.Event.EventKey.Equals(eventSlug)).ToList();
+                //look up the players that have been selected
+                List<Player> GetPlayers = new List<Player>();
+                var ThesePlayers = Request.Form["TournamentPlayers"].Split(',').ToList();
+
+                foreach(var ThisPlayer in ThesePlayers)
+                {
+                    int ThisPlayerID = int.Parse(ThisPlayer);
+                    var GetPlayer = db.Players.Find(ThisPlayerID);
+                    if (GetPlayer != null)
+                        GetPlayers.Add(GetPlayer);
+                }
+
+                //var GetPlayers = db.Players.Where(x => x.Event.EventKey.Equals(eventSlug)).ToList();
                 LawnBattle.Helpers.TeamHelper ThisTeamHelper = new Helpers.TeamHelper();
                 var MakeTeams = ThisTeamHelper.CreateRandomTeams(GetPlayers);
 
+                //add the teams to the database
+                int teamNumber = 1;
                 foreach (var ThisTeam in MakeTeams)
                 {
-                    Team NewTeam = new Team { IsHuman = true, Name = "Team", Player1 = ThisTeam.Player1, Player2 = ThisTeam.Player2, Tournament = tournament };
+                    Team NewTeam = new Team { IsHuman = true, Name = "Team" + teamNumber.ToString(), Player1 = ThisTeam.Player1, Player2 = ThisTeam.Player2, Tournament = tournament };
+                    db.Teams.Add(NewTeam);
+                    db.SaveChanges();
+                    teamNumber++;
+                }
+
+                //find out what size tournament this is
+                int BracketSize = 1;
+
+                while (BracketSize < MakeTeams.Count)
+                    BracketSize *= 2;
+
+                //MakeTeams = real teams
+                //Bracksize = first round games
+                //needed fale teams = bracketsize - MakeTeams.count
+                var FakeTeams = ThisTeamHelper.CreateFakeTeams(BracketSize - MakeTeams.Count);
+                foreach (var ThisTeam in FakeTeams)
+                {
+                    Team NewTeam = new Team { IsHuman = false, Tournament = tournament };
                     db.Teams.Add(NewTeam);
                     db.SaveChanges();
                 }
 
-                string stopHere = "";
+                //at this point, we have all of our teams!
+
+                //start creating games
+                if(tournament.TournamentType == 1)
+                {
+                    //get all the teams in once list
+                    //List<Team> AllTeams = MakeTeams.Concat(FakeTeams).ToList();
+
+                    var CreatedGames = ThisTeamHelper.EliminationCreateGames(MakeTeams, FakeTeams, BracketSize);
+
+                    foreach(var ThisGame in CreatedGames)
+                    {
+                        ThisGame.Tournament = tournament;
+                        db.Games.Add(ThisGame);
+                        db.SaveChanges();
+                    }
+
+                    string stopHere = "";
+                }
+
+               
 
                 return RedirectToAction("Index");
             }
@@ -141,8 +193,15 @@ namespace LawnBattle.Controllers
             //my own cascase delete.
             //TODO: use real cascade later
 
+            var GetGames = db.Games.Where(x => x.Tournament.ID.Equals(id)).ToList();
+            foreach (var ThisGame in GetGames)
+            {
+                db.Games.Remove(ThisGame);
+                db.SaveChanges();
+            }
+
             var GetTeams = db.Teams.Where(x => x.Tournament.ID.Equals(id)).ToList();
-            foreach(var ThisTeam in GetTeams)
+            foreach (var ThisTeam in GetTeams)
             {
                 db.Teams.Remove(ThisTeam);
                 db.SaveChanges();

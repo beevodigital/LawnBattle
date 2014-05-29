@@ -163,6 +163,10 @@
     <Compile Include="Migrations\201405280319516_rollback on that.Designer.cs">
       <DependentUpon>201405280319516_rollback on that.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201405290715488_added games to tourny.cs" />
+    <Compile Include="Migrations\201405290715488_added games to tourny.Designer.cs">
+      <DependentUpon>201405290715488_added games to tourny.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\Game.cs" />
@@ -178,6 +182,8 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Public\CSS\jquery.bracket.min.css" />
+    <Content Include="Public\Javascript\jquery.bracket.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -247,6 +253,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405280319516_rollback on that.resx">
       <DependentUpon>201405280319516_rollback on that.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405290715488_added games to tourny.resx">
+      <DependentUpon>201405290715488_added games to tourny.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

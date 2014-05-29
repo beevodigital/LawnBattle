@@ -76,3 +76,4 @@ C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.dll
 C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.pdb
 C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.AddedNametoTourny.resources
 C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.rollbackonthat.resources
+C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.addedgamestotourny.resources

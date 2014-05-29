@@ -13,5 +13,6 @@ namespace LawnBattle.Models
         
         public virtual Event Event { get; set; }
         public virtual ICollection<Team> Teams { get; set; }
+        public virtual ICollection<Game> Games { get; set; }
     }
 }
