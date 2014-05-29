@@ -150,7 +150,7 @@ namespace LawnBattle.Helpers
             List<Game> TheseGames = new List<Game>();
             int ThisGameCounter = 0;
 
-            for (int i = 0; i < BracketSize; i++ )
+            for (int i = 0; i < (BracketSize - 1); i++ )
             {
                 if(i < (BracketSize / 2))
                 {

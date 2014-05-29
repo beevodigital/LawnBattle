@@ -112,7 +112,42 @@
                         }
                         
                     }
-                ], results: [[[[1, 0], [1, 0], [1, 0], [0,1]]]]
+                ], @{
+                    //results are more complicated
+                    //every game for the tourny is in the database, so we need to smartly loop over them and break out rounds
+                    int RoundSize = firstRoundSize; //this is half of the team counts
+                    int Counter = 1; //not zero based forthis loop
+                    int GameCounter = 1;
+                    string resultsBuilder = "["; //opening bracket for first round
+                    foreach(var ThisGame in Model.Games)
+                        {
+                            resultsBuilder += "[1,0]";
+                            if(Counter.Equals(RoundSize))
+                            {
+                                //we have reached the end of the round, so end it
+                                RoundSize = (RoundSize / 2);
+                                Counter = 0;
+                                if(RoundSize > 0)
+                                {
+                                    //another rounds to come
+                                    resultsBuilder += "],[";
+                                }
+                                else
+                                {
+                                    resultsBuilder += "]";
+                                }
+                               
+                            }
+                            else
+                            {
+                                //there is another game coming?
+                                resultsBuilder += ",";
+                            }
+                            Counter++;
+                            GameCounter++;
+                        }
+                    }
+                    results: [[@Html.Raw(resultsBuilder)]]
             }
 
             $(function () {
