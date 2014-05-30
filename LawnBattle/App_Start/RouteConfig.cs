@@ -19,10 +19,24 @@ namespace LawnBattle
                 defaults: new { controller = "events", action = "index", id = UrlParameter.Optional }
             );
 
+            /*
+            routes.MapRoute(
+                name: "TournamentGamesBasic",
+                url: "events/{eventSlug}/tournaments/game/{action}/{id}",
+                defaults: new { controller = "games", action = "index", eventSlug = UrlParameter.Optional, id = UrlParameter.Optional }
+            );
+            */
+
+            routes.MapRoute(
+                name: "EventsTournamentGames",
+                url: "events/{eventSlug}/tournaments/details/{tournamentid}/game/{action}/{id}",
+                defaults: new { controller = "games", action = "index", eventSlug = UrlParameter.Optional, id = UrlParameter.Optional }
+            );
+
             routes.MapRoute(
                 name: "EventsTournaments",
-                url: "events/{eventSlug}/tournaments/{action}",
-                defaults: new { controller = "tournaments", action = "index", eventSlug = UrlParameter.Optional }
+                url: "events/{eventSlug}/tournaments/{action}/{id}",
+                defaults: new { controller = "tournaments", action = "index", eventSlug = UrlParameter.Optional, id = UrlParameter.Optional }
             );
 
             routes.MapRoute(

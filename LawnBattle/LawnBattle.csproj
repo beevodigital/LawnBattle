@@ -120,12 +120,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\EventsController.cs" />
+    <Compile Include="Controllers\GamesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlayersController.cs" />
     <Compile Include="Controllers\TournamentsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\enums.cs" />
     <Compile Include="Helpers\TeamHelper.cs" />
     <Compile Include="Migrations\201405260306527_Initial.cs" />
     <Compile Include="Migrations\201405260306527_Initial.Designer.cs">
@@ -166,6 +168,14 @@
     <Compile Include="Migrations\201405290715488_added games to tourny.cs" />
     <Compile Include="Migrations\201405290715488_added games to tourny.Designer.cs">
       <DependentUpon>201405290715488_added games to tourny.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405300004177_Game status.cs" />
+    <Compile Include="Migrations\201405300004177_Game status.Designer.cs">
+      <DependentUpon>201405300004177_Game status.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405300047155_game scores to model.cs" />
+    <Compile Include="Migrations\201405300047155_game scores to model.Designer.cs">
+      <DependentUpon>201405300047155_game scores to model.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Event.cs" />
@@ -225,6 +235,11 @@
     <Content Include="Views\Players\Details.cshtml" />
     <Content Include="Views\Players\Edit.cshtml" />
     <Content Include="Views\Players\Index.cshtml" />
+    <Content Include="Views\Games\Create.cshtml" />
+    <Content Include="Views\Games\Delete.cshtml" />
+    <Content Include="Views\Games\Details.cshtml" />
+    <Content Include="Views\Games\Edit.cshtml" />
+    <Content Include="Views\Games\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201405260306527_Initial.resx">
@@ -256,6 +271,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405290715488_added games to tourny.resx">
       <DependentUpon>201405290715488_added games to tourny.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405300004177_Game status.resx">
+      <DependentUpon>201405300004177_Game status.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405300047155_game scores to model.resx">
+      <DependentUpon>201405300047155_game scores to model.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

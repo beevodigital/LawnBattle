@@ -126,6 +126,32 @@ namespace LawnBattle.Controllers
                         db.SaveChanges();
                     }
 
+                    //find games against not human players and advance them
+                    var GetFakeGames = db.Games.Where(x => x.Team1.IsHuman.Equals(false) || x.Team2.IsHuman.Equals(false)).ToList();
+
+                    foreach(var ThisGame in GetFakeGames)
+                    {
+                        //we need to update this game, and then pass it on
+                        ThisGame.GameStatus = (int)LawnBattle.Helpers.enums.GameStatus.Complete;
+                        //what team won?
+                        if(ThisGame.Team1.IsHuman)
+                        {
+                            ThisGame.Team1Score = 1;
+                            ThisGame.Team2Score = 0;
+                        }
+                        else
+                        {
+                            ThisGame.Team1Score = 0;
+                            ThisGame.Team2Score = 0;
+                        }
+
+                        db.Entry(ThisGame).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        ThisTeamHelper.AdvanceToGame(ThisGame);
+                        
+                    }
+
                     string stopHere = "";
                 }
 

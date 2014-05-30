@@ -36,20 +36,48 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Teams)
+            @Html.DisplayNameFor(model => model.Games)
         </dt>
         <dd>
             <ul>
-            @{
-                foreach(var ThisTeam in Model.Teams)
-                {
-                    <li>@ThisTeam.Name</li>
+                <li>Games In Progress
                     <ul>
-                        <li>@(ThisTeam.Player1 != null ? ThisTeam.Player1.Name : "Bye")</li>
-                        <li>@(ThisTeam.Player2 != null ? ThisTeam.Player2.Name : "Bye")</li>
+                        @foreach(var ThisGame in Model.Games.Where(x => x.GameStatus.Equals((int)LawnBattle.Helpers.enums.GameStatus.InProgress)))
+                        {
+                            <li>@ThisGame.Team1.Player1.Name vs @ThisGame.Team2.Player1.Name<a href="@(Request.Url.AbsoluteUri)/game/edit/@ThisGame.ID">Score Game!</a></li>
+                        }
                     </ul>
-                }
-            }
+                </li>
+                <li>Games Ready to be played
+                    <ul>
+                        @foreach (var ThisGame in Model.Games.Where(x => x.GameStatus.Equals((int)LawnBattle.Helpers.enums.GameStatus.New)))
+                        {
+                            <li>@(ThisGame.Team1 != null ? ThisGame.Team1.Player1.Name : "Waiting") vs @(ThisGame.Team2 != null && ThisGame.Team2.Player1 != null ? ThisGame.Team2.Player1.Name : "Waiting")<a href="@(Request.Url.AbsoluteUri)/game/edit/@ThisGame.ID">Start!</a></li>
+                        }
+                    </ul>
+
+                </li>
+                <li>
+                    Games Complete
+                    <ul>
+                        @foreach (var ThisGame in Model.Games.Where(x => x.GameStatus.Equals((int)LawnBattle.Helpers.enums.GameStatus.Complete)))
+                        {
+                            <li>x</li>
+                        }
+                    </ul>
+
+                </li>
+                <li>
+                    Games Waiting
+                    <ul>
+                        @foreach (var ThisGame in Model.Games.Where(x => x.GameStatus.Equals((int)LawnBattle.Helpers.enums.GameStatus.Waiting)))
+                        {
+                            string stopHere = "";
+                            <li>x - @ThisGame.GameSlot;</li>
+                        }
+                    </ul>
+
+                </li>
             </ul>
         </dd>
     </dl>
@@ -121,7 +149,20 @@
                     string resultsBuilder = "["; //opening bracket for first round
                     foreach(var ThisGame in Model.Games)
                         {
-                            resultsBuilder += "[1,0]";
+                            var Team1Result = "null";
+                            var Team2Result = "null";
+                        
+                            if(ThisGame.GameStatus != (int)LawnBattle.Helpers.enums.GameStatus.Complete)
+                            {
+                                //the game is not done, no points to mark
+                                resultsBuilder += "[null,null]";
+                            }    
+                            else
+                            {
+                                resultsBuilder += "[" + ThisGame.Team1Score + "," + ThisGame.Team2Score + "]"; 
+                            }
+                        
+                            //resultsBuilder += "[1,0]";
                             if(Counter.Equals(RoundSize))
                             {
                                 //we have reached the end of the round, so end it

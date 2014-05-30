@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Data.Entity;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +10,8 @@ namespace LawnBattle.Helpers
 {
     public class TeamHelper
     {
+        private LawnBattleContext db = new LawnBattleContext();
+
         public List<LawnBattle.Models.Team> CreateRandomTeams(List<Player> HumanPlayers)
         {
             List<LawnBattle.Models.Team> HumanTeams = new List<LawnBattle.Models.Team>();
@@ -142,6 +146,41 @@ namespace LawnBattle.Helpers
             return FakeTeams;
         }
 
+        public void AdvanceToGame(Game game)
+        {
+            //need to grab the game from the db to get lazy objects
+            var LoadGame = db.Games.Where(x => x.ID.Equals(game.ID)).Include(x => x.Tournament).Include(x => x.Team1).Include(x => x.Team2).FirstOrDefault();
+
+            //since it is complete, we need to move the winner over to the next game
+            //ONLY if the current game slot is not 2 (championship round)
+            if (game.GameSlot != 2)
+            {
+                var WinningTeam = new Team();
+                if (game.Team1Score > game.Team2Score)
+                    WinningTeam = LoadGame.Team1;
+                else
+                    WinningTeam = LoadGame.Team2;
+
+                int CurrentGameSlot = game.GameSlot + 1;
+                int NumberOfTeams = LoadGame.Tournament.Teams.Count;
+
+                int NewGameSlot = ((NumberOfTeams / 2) + (int)Math.Ceiling((double)CurrentGameSlot / 2)) - 1;
+
+                //grab the new Game by slot and update date
+                var NewGame = db.Games.Where(x => x.GameSlot.Equals(NewGameSlot)).Where(x => x.Tournament.ID.Equals(LoadGame.Tournament.ID)).FirstOrDefault();
+                if (game.GameSlot % 2 == 0)
+                    NewGame.Team1 = WinningTeam;
+                else
+                    NewGame.Team2 = WinningTeam;
+
+                if (NewGame.Team1 != null && NewGame.Team2 != null)
+                    NewGame.GameStatus = (int)LawnBattle.Helpers.enums.GameStatus.New;
+
+                db.Entry(NewGame).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
         public List<Game> EliminationCreateGames(List<Team> HumanTeams, List<Team> FakeTeams, int BracketSize)
         {
             //we need to create our first round games
@@ -157,6 +196,7 @@ namespace LawnBattle.Helpers
                     //creating real games
                     //creat the teams. 
                     Game ThisGame = new Game();
+                    ThisGame.GameStatus = (int)enums.GameStatus.New;
                     //are there humans for team 1?
                     if (HumanTeams.Count > 0)
                     {
@@ -190,6 +230,7 @@ namespace LawnBattle.Helpers
                 {
                     //creating empty games
                     Game ThisEmptyGame = new Game();
+                    ThisEmptyGame.GameStatus = (int)enums.GameStatus.Waiting;
                     TheseGames.Add(ThisEmptyGame);
                 }
                 //Number the game slots
