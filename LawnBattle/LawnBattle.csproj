@@ -127,6 +127,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DataAnnotations\CheckEventName.cs" />
     <Compile Include="Helpers\enums.cs" />
     <Compile Include="Helpers\TeamHelper.cs" />
     <Compile Include="Migrations\201405260306527_Initial.cs" />
@@ -177,6 +178,18 @@
     <Compile Include="Migrations\201405300047155_game scores to model.Designer.cs">
       <DependentUpon>201405300047155_game scores to model.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201405301821063_reguired tourny name.cs" />
+    <Compile Include="Migrations\201405301821063_reguired tourny name.Designer.cs">
+      <DependentUpon>201405301821063_reguired tourny name.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405301829347_required event name.cs" />
+    <Compile Include="Migrations\201405301829347_required event name.Designer.cs">
+      <DependentUpon>201405301829347_required event name.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405301853402_data attributes.cs" />
+    <Compile Include="Migrations\201405301853402_data attributes.Designer.cs">
+      <DependentUpon>201405301853402_data attributes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\Game.cs" />
@@ -199,6 +212,10 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -277,6 +294,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405300047155_game scores to model.resx">
       <DependentUpon>201405300047155_game scores to model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405301821063_reguired tourny name.resx">
+      <DependentUpon>201405301821063_reguired tourny name.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405301829347_required event name.resx">
+      <DependentUpon>201405301829347_required event name.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405301853402_data attributes.resx">
+      <DependentUpon>201405301853402_data attributes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -79,3 +79,6 @@ C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.rol
 C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.addedgamestotourny.resources
 C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.Gamestatus.resources
 C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.gamescorestomodel.resources
+C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.reguiredtournyname.resources
+C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.requiredeventname.resources
+C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.dataattributes.resources

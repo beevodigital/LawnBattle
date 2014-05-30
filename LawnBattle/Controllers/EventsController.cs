@@ -65,6 +65,7 @@ namespace LawnBattle.Controllers
         {
             if (ModelState.IsValid)
             {
+                @event.EventKey = @event.Name;
                 db.Events.Add(@event);
                 db.SaveChanges();
                 return RedirectToAction("Index");
