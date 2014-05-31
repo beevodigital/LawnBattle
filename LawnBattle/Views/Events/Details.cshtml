@@ -7,39 +7,49 @@
 
 <div class="row">
     <div class="col-md-12">
+        <h2>@Model.Name</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-1">
+        <p>Active Tournies</p>
+    </div>
+
+    <div class="col-md-1">
+        <p><a href="/test"><button type="button" class="btn btn-default">Create New Tournament</button></a></p>
+        <p><button type="button" class="btn btn-default">Create New Tournament</button></p>
+        <p><button type="button" class="btn btn-default">Create New Tournament</button></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-1">
+        <p>Active Tournies</p>
+    </div>
+
+    <div class="col-md-1">
+        <p><button type="button" class="btn btn-default">Create New Tournament</button></p>
+        <p><button type="button" class="btn btn-default">Create New Tournament</button></p>
+        <p><button type="button" class="btn btn-default">Create New Tournament</button></p>
+    </div>
+</div>
+    
+
+    <div class="col-md-12">
         <div>
-            <h4>Event</h4>
-            <hr />
-            <dl class="dl-horizontal">
-                <dt>
-                    Active Tournies:
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Name)
-                </dd>
-
-                <dt>
-                    Completed Tournies:
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.EventKey)
-                </dd>
-
-            </dl>
+            <p>
+                <a href="@Url.RouteUrl("EventsTournaments", new { eventSlug = Model.EventKey, action = "create" })">
+                    <button type="button" class="btn btn-success btn-block">Create New Tournament</button>
+                </a>
+            </p>
         </div>
-        <div class="col-md-12">
-            <div>
-                <button type="button" class="btn btn-success btn-block">Create New Tournament</button>
-            </div>
-        </div>
-        @*
+    </div>
+@*
     <p>
         @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
         @Html.ActionLink("Back to List", "Index")
     </p>*@
-    </div>
-</div>
+
 
    
