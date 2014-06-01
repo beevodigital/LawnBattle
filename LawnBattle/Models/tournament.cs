@@ -12,6 +12,8 @@ namespace LawnBattle.Models
         public int TournamentType { get; set; }
         [Required]
         public string Name { get; set; }
+
+        public string JSONstate { get; set; }
         
         public virtual Event Event { get; set; }
         public virtual ICollection<Team> Teams { get; set; }

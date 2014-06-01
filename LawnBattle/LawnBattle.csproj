@@ -190,6 +190,10 @@
     <Compile Include="Migrations\201405301853402_data attributes.Designer.cs">
       <DependentUpon>201405301853402_data attributes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201406012036475_added JSON state.cs" />
+    <Compile Include="Migrations\201406012036475_added JSON state.Designer.cs">
+      <DependentUpon>201406012036475_added JSON state.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\Game.cs" />
@@ -307,6 +311,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405301853402_data attributes.resx">
       <DependentUpon>201405301853402_data attributes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406012036475_added JSON state.resx">
+      <DependentUpon>201406012036475_added JSON state.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

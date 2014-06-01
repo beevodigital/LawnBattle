@@ -59,8 +59,35 @@
 <div class="row">
     <div id="bracket">
         <script>
+            //TODO: working on creating a json object hat gives us every game and its scores (and its team).
+            var ResultsArray = [];
+
             function saveFn(data, userData) {
+                //ajax call to update the json
+                var data = JSON.stringify($('#bracket').bracket('data'));
+                console.log(data);
+                $.ajax({
+                    url: userData,
+                    type:"POST",
+                    data: {JSONScore : data}
+                });
+
                 console.log("saving");
+                console.log(ResultsArray);
+
+                //are the last two scores filled out?
+                if(ResultsArray[ResultsArray.length -1].score != "--" && ResultsArray[ResultsArray.length -2].score != "--")
+                {
+                    alert('tourny over');
+                    console.log(ResultsArray);
+
+                    //send to server and clear array for the next edit
+                    //tourny over!
+                }
+                else
+                {
+                    ResultsArray = [];
+                }
             }
 
             function matchClicked(data, arg2) {
@@ -77,24 +104,53 @@
             /* Render function is called for each team label when data is changed, data
              * contains the data object given in init and belonging to this slot. */
             function render_fn(container, data, score) {
-                console.log(data);
+                //console.log(data);
+                //console.log(score);
+
+                //start adding games to the array. Order is very important
+                //we are going to clear and add it everytime. Then, we are going to check the final two scores and see if they are valid
+                var ThisGame = {};
+                ThisGame = { TeamID : data.ID, TeamName: data.Name, score : score };
+                ResultsArray.push(ThisGame);
+
 
                 container.append(data.Name);
             }
 
+            @{
+                //check if we have results
+                string ResultsJson = "[[[[]]], [], []]";
+                if (Model.JSONstate.Length > 3)
+                { 
+                    ResultsJson = HttpUtility.UrlDecode(Model.JSONstate);
+                }    
+            }
+
             $(document).ready(function () {
-                var doubleElimination = {
-                    "teams":@Html.Raw(TeamJson)
-                        ,
-                    "results": [[[[]]], [], []]
-                }
+                var doubleElimination = 
+                    @if (Model.JSONstate.Length > 3)
+                    { 
+                        <text>
+                            @Html.Raw(ResultsJson)
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                        {"teams":@Html.Raw(TeamJson)
+                               ,
+                            "results": [[[[]]], [], []]}
+                        </text>
+                    } 
+                   
+                
 
                 $(function () {
                     $('#bracket').bracket({
                         skipConsolationRound: true,
                         init: doubleElimination,
                         save: saveFn,
-                        userData: "",
+                        userData: "@Url.RouteUrl("EventsTournaments", new { eventSlug = Model.Event.EventKey, action = "SaveJSON", id = Model.ID })",
                         decorator: {
                             edit: edit_fn,
                             render: render_fn
@@ -103,6 +159,6 @@
                     })
                 })
             });
-        </script>
+</script>
     </div>
 </div>

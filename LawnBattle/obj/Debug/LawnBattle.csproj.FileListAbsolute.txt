@@ -82,3 +82,4 @@ C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.gam
 C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.reguiredtournyname.resources
 C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.requiredeventname.resources
 C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.dataattributes.resources
+C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Debug\LawnBattle.Migrations.addedJSONstate.resources

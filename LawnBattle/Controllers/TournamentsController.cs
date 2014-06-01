@@ -38,6 +38,21 @@ namespace LawnBattle.Controllers
             return View(tournament);
         }
 
+        [HttpPost]
+        public ActionResult SaveJSON(string eventSlug, int id)
+        {
+            //look up tourny
+            var GetTourny = db.Tournaments.Where(x => x.ID.Equals(id)).Where(x => x.Event.EventKey.Equals(eventSlug)).FirstOrDefault();
+
+            if (GetTourny != null)
+            {
+                GetTourny.JSONstate = Request.Form["JSONScore"];
+                db.Entry(GetTourny).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Content("IN");
+        }
+
         // GET: /Tournament/Create
         public ActionResult Create(string eventSlug)
         {
