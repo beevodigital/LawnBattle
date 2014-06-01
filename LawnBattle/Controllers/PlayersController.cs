@@ -17,6 +17,7 @@ namespace LawnBattle.Controllers
         // GET: /Players/
         public ActionResult Index(string eventSlug)
         {
+            ViewBag.eventSlug = eventSlug;
             return View(db.Players.Where(x => x.Event.EventKey.Equals(eventSlug)).ToList());
         }
 
@@ -38,6 +39,7 @@ namespace LawnBattle.Controllers
         // GET: /Players/Create
         public ActionResult Create(string eventSlug)
         {
+            ViewBag.eventSlug = eventSlug;
             return View();
         }
 
@@ -46,8 +48,12 @@ namespace LawnBattle.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(string eventSlug, [Bind(Include="ID,Name,Email,IsActive,IsHuman")] Player player)
+        public ActionResult Create(string eventSlug, [Bind(Include="ID,Name")] Player player)
         {
+            player.Email = "";
+            player.IsActive = true;
+            player.IsHuman = true;
+            ViewBag.eventSlug = eventSlug;
             var GetEvent = db.Events.Where(x => x.EventKey.Equals(eventSlug)).FirstOrDefault();
 
             if (ModelState.IsValid && GetEvent != null)

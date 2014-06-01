@@ -49,8 +49,8 @@ namespace LawnBattle
 
             routes.MapRoute(
                 name: "EventsPlayers",
-                url: "events/{eventSlug}/players/{action}",
-                defaults: new { controller = "players", action = "index", eventSlug = UrlParameter.Optional }
+                url: "events/{eventSlug}/players/{action}/{id}",
+                defaults: new { controller = "players", action = "index", eventSlug = UrlParameter.Optional, id = UrlParameter.Optional }
             );
 
             routes.MapRoute(

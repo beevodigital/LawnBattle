@@ -17,6 +17,8 @@ namespace LawnBattle.Controllers
         // GET: /Tournament/
         public ActionResult Index(string eventSlug)
         {
+            ViewBag.eventSlug = eventSlug;
+
             return View(db.Tournaments.Where(x => x.Event.EventKey.Equals(eventSlug)).ToList());
         }
 
@@ -32,6 +34,7 @@ namespace LawnBattle.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.eventSlug = eventSlug;
             return View(tournament);
         }
 
@@ -41,7 +44,7 @@ namespace LawnBattle.Controllers
             //get all of the players in this event
 
             ViewBag.Players = db.Players.Where(x => x.Event.EventKey.Equals(eventSlug)).ToList();
-
+            ViewBag.eventSlug = eventSlug;
             return View();
         }
 
@@ -152,7 +155,11 @@ namespace LawnBattle.Controllers
                     //send them to the page
                     return RedirectToRoute("EventsTournaments", new { eventSlug = eventSlug, action = "details", id = tournament.ID });
                 }
-
+                if (tournament.TournamentType == 3)
+                {
+                    //send them to the page
+                    return RedirectToRoute("EventsTournaments", new { eventSlug = eventSlug, action = "details", id = tournament.ID });
+                }
                 //this is the first try at a c# based single elimination
                 if(tournament.TournamentType == 1)
                 {
