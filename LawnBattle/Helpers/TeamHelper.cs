@@ -231,7 +231,8 @@ namespace LawnBattle.Helpers
                     //creating empty games
                     Game ThisEmptyGame = new Game();
                     ThisEmptyGame.GameStatus = (int)enums.GameStatus.Waiting;
-                    TheseGames.Add(ThisEmptyGame);
+                    //TODO: stopped creating the empty games for now
+                    //TheseGames.Add(ThisEmptyGame);
                 }
                 //Number the game slots
                 int GameCounter = 0;
@@ -245,5 +246,11 @@ namespace LawnBattle.Helpers
                 //after that create empties
             return TheseGames;
         }
+    }
+
+    public class TeamForJSBracket
+    {
+        public string Name { get; set; }
+        public int ID { get; set; }
     }
 }

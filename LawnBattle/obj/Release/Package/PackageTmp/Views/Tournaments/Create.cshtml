@@ -1,0 +1,69 @@
+﻿@model LawnBattle.Models.Tournament
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Tournament</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TournamentType, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select name="TournamentType" class="form-control dropdown">
+                    <option value="2">Double Elimination</option>
+                </select>
+                        @*Html.EditorFor(model => model.TournamentType)
+                        @Html.ValidationMessageFor(model => model.TournamentType)*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Name, new { @class ="form-control"})
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Who's Playing?</label>
+            <div class="col-md-10">
+                @{
+                    var GetPlayers = (List<LawnBattle.Models.Player>) ViewBag.Players;
+                    
+                    foreach(var ThisPlayer in GetPlayers)
+                    {
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="TournamentPlayers" value="@ThisPlayer.ID">@ThisPlayer.Name
+                            </label>
+                        </div>
+                    }
+                }
+                
+            </div>
+            <label class="control-label col-md-4">Forget to add some players? <a href="">Add some more now!</a></label>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-12">
+                <input type="submit" value="Create" class="btn btn-success btn-block" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

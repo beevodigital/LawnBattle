@@ -1,0 +1,80 @@
+﻿@model LawnBattle.Models.Tournament
+@using System.Web.Script.Serialization; 
+<ul>
+    
+    @{
+        List<object> TheTeams = new List<object>();
+        
+        foreach(var ThisTeam in Model.Teams)
+        {
+            List<string> Players = new List<string>();
+            //work on the first team:
+            if(ThisTeam.Player1 != null && ThisTeam.Player2 != null)
+            {
+                //real people
+                Players.Add(ThisTeam.Player1.Name + " / " + ThisTeam.Player2.Name);
+            }
+            else
+            {
+                Players.Add("BYE");
+            }
+            Players.Add("Team 2");
+            TheTeams.Add(Players);
+        }
+        
+        JavaScriptSerializer ThisJS = new JavaScriptSerializer();
+
+        string TeamJson = ThisJS.Serialize(TheTeams);
+        
+    } 
+</ul>
+
+<div class="row">
+    <div id="bracket">
+        <script>
+            function saveFn(data, userData) {
+                console.log("saving");
+            }
+
+            function matchClicked(data, arg2) {
+                console.log("Arg1: " + data);
+                console.log("Arg2: " + arg2);
+                //console.log("Arg3: " + arg3);
+            }
+
+            /* Edit function is called when team label is clicked */
+            function edit_fn(container, data, doneCb) {
+                console.log("editing");
+            }
+
+            /* Render function is called for each team label when data is changed, data
+             * contains the data object given in init and belonging to this slot. */
+            function render_fn(container, data, score) {
+                console.log("in render");
+
+                container.append(data.name);
+            }
+
+            $(document).ready(function () {
+                var doubleElimination = {
+                    "teams":@Html.Raw(TeamJson)
+                        ,
+                    "results": [[[[]]], [], []]
+                }
+
+                $(function () {
+                    $('#bracket').bracket({
+                        init: doubleElimination,
+                        save: saveFn,
+                        userData: "",
+                        //decorator: {
+                        //    edit: edit_fn,
+                        //    render: render_fn
+                        //}
+                        //onMatchClick: matchClicked
+                    })
+                })
+            });
+        </script>
+    </div>
+</div>

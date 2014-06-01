@@ -20,6 +20,23 @@ namespace LawnBattle.Controllers
             return View(db.Events.ToList());
         }
 
+        public ActionResult ReRoute()
+        {
+            if(Request.Form["EventKey"] != null && Request.Form["EventKey"] != "")
+            {
+                string EvenyKey = Request.Form["EventKey"].ToString();
+                var GetEvent = db.Events.Where(x => x.EventKey.Equals(EvenyKey)).FirstOrDefault();
+
+                if (GetEvent != null)
+                {
+                    return Redirect("/events/" + Request.Form["EventKey"]);
+                }
+                else
+                    return View("Create");
+            }
+            return View(db.Events.ToList());
+        }
+
         // GET: /Event/Details/5
         public ActionResult eventBySlug(string id)
         {
@@ -68,7 +85,8 @@ namespace LawnBattle.Controllers
                 @event.EventKey = @event.Name;
                 db.Events.Add(@event);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Redirect("/events/" + @event.EventKey);
+                //return RedirectToAction("Index");
             }
 
             return View(@event);

@@ -52,6 +52,29 @@ namespace LawnBattle.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(string eventSlug, [Bind(Include="ID,TournamentType,Name")] Tournament tournament)
         {
+            if (Request.Form["TournamentPlayers"] == null)
+            {
+                ModelState.AddModelError("", "You must select at least 4 teams");
+                ViewBag.Players = db.Players.Where(x => x.Event.EventKey.Equals(eventSlug)).ToList();
+                return View(tournament);
+            }
+
+            var ThesePlayers = Request.Form["TournamentPlayers"].Split(',').ToList();
+
+            //make sure there are an even number of players
+            if(ThesePlayers.Count < 4 || ThesePlayers.Count % 2 != 0)
+            { 
+                ModelState.AddModelError("", "You must have at least 4 players and an event amount");
+                ViewBag.Players = db.Players.Where(x => x.Event.EventKey.Equals(eventSlug)).ToList();
+                return View(tournament);
+            }
+
+            //one more check. If it is valid and has 4 teams, make sure it is set to single elim
+            if(ThesePlayers.Count == 4 && tournament.TournamentType == 2)
+            {
+                tournament.TournamentType = 3;
+            }
+
             //look up the event
             var GetEvent = db.Events.Where(x => x.EventKey.Equals(eventSlug)).FirstOrDefault();
 
@@ -68,7 +91,7 @@ namespace LawnBattle.Controllers
                 //make teams (this will only make REAL teams):
                 //look up the players that have been selected
                 List<Player> GetPlayers = new List<Player>();
-                var ThesePlayers = Request.Form["TournamentPlayers"].Split(',').ToList();
+                
 
                 foreach(var ThisPlayer in ThesePlayers)
                 {
@@ -110,21 +133,30 @@ namespace LawnBattle.Controllers
                 }
 
                 //at this point, we have all of our teams!
+                //get all the teams in once list
+                //List<Team> AllTeams = MakeTeams.Concat(FakeTeams).ToList();
+
+                var CreatedGames = ThisTeamHelper.EliminationCreateGames(MakeTeams, FakeTeams, BracketSize);
+
+                foreach (var ThisGame in CreatedGames)
+                {
+                    ThisGame.Tournament = tournament;
+                    db.Games.Add(ThisGame);
+                    db.SaveChanges();
+                }
 
                 //start creating games
+                //Double Elimination
+                if(tournament.TournamentType == 2)
+                {
+                    //send them to the page
+                    return RedirectToRoute("EventsTournaments", new { eventSlug = eventSlug, action = "details", id = tournament.ID });
+                }
+
+                //this is the first try at a c# based single elimination
                 if(tournament.TournamentType == 1)
                 {
-                    //get all the teams in once list
-                    //List<Team> AllTeams = MakeTeams.Concat(FakeTeams).ToList();
-
-                    var CreatedGames = ThisTeamHelper.EliminationCreateGames(MakeTeams, FakeTeams, BracketSize);
-
-                    foreach(var ThisGame in CreatedGames)
-                    {
-                        ThisGame.Tournament = tournament;
-                        db.Games.Add(ThisGame);
-                        db.SaveChanges();
-                    }
+                   
 
                     //find games against not human players and advance them
                     var GetFakeGames = db.Games.Where(x => x.Team1.IsHuman.Equals(false) || x.Team2.IsHuman.Equals(false)).ToList();

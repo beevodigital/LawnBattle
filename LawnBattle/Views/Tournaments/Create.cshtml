@@ -20,15 +20,19 @@
         <div class="form-group">
             @Html.LabelFor(model => model.TournamentType, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.TournamentType)
-                @Html.ValidationMessageFor(model => model.TournamentType)
+                <select name="TournamentType" class="form-control dropdown">
+                    <option value="2">Double Elimination</option>
+                    <option value="3">Single Elimination</option>
+                </select>
+                        @*Html.EditorFor(model => model.TournamentType)
+                        @Html.ValidationMessageFor(model => model.TournamentType)*@
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name)
+                @Html.TextBoxFor(model => model.Name, new { @class ="form-control"})
                 @Html.ValidationMessageFor(model => model.Name)
             </div>
         </div>
@@ -54,16 +58,12 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+            <div class="col-md-12">
+                <input type="submit" value="Create" class="btn btn-success btn-block" />
             </div>
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

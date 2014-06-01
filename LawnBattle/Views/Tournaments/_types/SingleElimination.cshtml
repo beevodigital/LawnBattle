@@ -1,0 +1,108 @@
+﻿@model LawnBattle.Models.Tournament
+@using System.Web.Script.Serialization; 
+<ul>
+    
+    @{
+        List<object> TheTeams = new List<object>();
+        
+        foreach(var ThisGame in Model.Games)
+        {
+            List<LawnBattle.Helpers.TeamForJSBracket> Players = new List<LawnBattle.Helpers.TeamForJSBracket>();
+            //work on the first team:
+            if (ThisGame.Team1 != null && ThisGame.Team1.Player1 != null && ThisGame.Team1.Player2 != null)
+            {
+                //real people
+                LawnBattle.Helpers.TeamForJSBracket ThisJSTeam = new LawnBattle.Helpers.TeamForJSBracket();
+                ThisJSTeam.Name = ThisGame.Team1.Player1.Name + " / " + ThisGame.Team1.Player2.Name;
+                ThisJSTeam.ID = ThisGame.Team1.ID;
+                //Players.Add(ThisTeam.Player1.Name + " / " + ThisTeam.Player2.Name);
+                Players.Add(ThisJSTeam);
+            }
+            else
+            {
+                LawnBattle.Helpers.TeamForJSBracket ThisJSTeam = new LawnBattle.Helpers.TeamForJSBracket();
+                ThisJSTeam.Name = "BYE";
+                ThisJSTeam.ID = 0;
+                //Players.Add(ThisTeam.Player1.Name + " / " + ThisTeam.Player2.Name);
+                Players.Add(ThisJSTeam);
+            }
+            //TheTeams.Add(Players);
+
+            //work on the secind team:
+            if (ThisGame.Team2 != null && ThisGame.Team2.Player1 != null && ThisGame.Team2.Player2 != null)
+            {
+                //real people
+                LawnBattle.Helpers.TeamForJSBracket ThisJSTeam = new LawnBattle.Helpers.TeamForJSBracket();
+                ThisJSTeam.Name = ThisGame.Team2.Player1.Name + " / " + ThisGame.Team2.Player2.Name;
+                ThisJSTeam.ID = ThisGame.Team2.ID;
+                //Players.Add(ThisTeam.Player1.Name + " / " + ThisTeam.Player2.Name);
+                Players.Add(ThisJSTeam);
+            }
+            else
+            {
+                LawnBattle.Helpers.TeamForJSBracket ThisJSTeam = new LawnBattle.Helpers.TeamForJSBracket();
+                ThisJSTeam.Name = "BYE";
+                ThisJSTeam.ID = 0;
+                //Players.Add(ThisTeam.Player1.Name + " / " + ThisTeam.Player2.Name);
+                Players.Add(ThisJSTeam);
+            }
+            TheTeams.Add(Players);
+        }
+        
+        JavaScriptSerializer ThisJS = new JavaScriptSerializer();
+
+        string TeamJson = ThisJS.Serialize(TheTeams);
+        
+    } 
+</ul>
+@Html.Raw(TeamJson);
+<div class="row">
+    <div id="bracket">
+        <script>
+            function saveFn(data, userData) {
+                console.log("saving");
+            }
+
+            function matchClicked(data, arg2) {
+                console.log("Arg1: " + data);
+                console.log("Arg2: " + arg2);
+                //console.log("Arg3: " + arg3);
+            }
+
+            /* Edit function is called when team label is clicked */
+            function edit_fn(container, data, doneCb) {
+                console.log("editing");
+            }
+
+            /* Render function is called for each team label when data is changed, data
+             * contains the data object given in init and belonging to this slot. */
+            function render_fn(container, data, score) {
+                console.log(data);
+
+                container.append(data.Name);
+            }
+
+            $(document).ready(function () {
+                var doubleElimination = {
+                    "teams":@Html.Raw(TeamJson)
+                        ,
+                    "results": [[[[]]]]
+                }
+
+                $(function () {
+                    $('#bracket').bracket({
+                        skipConsolationRound: true,
+                        init: doubleElimination,
+                        save: saveFn,
+                        userData: "",
+                        decorator: {
+                            edit: edit_fn,
+                            render: render_fn
+                        }
+                        //onMatchClick: matchClicked
+                    })
+                })
+            });
+        </script>
+    </div>
+</div>

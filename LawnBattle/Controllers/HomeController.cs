@@ -15,9 +15,9 @@ namespace LawnBattle.Controllers
             LawnBattleContext ThisContext = new LawnBattleContext();
 
             //testing
-            var GetPlayers = ThisContext.Players.Take(12).ToList();
-            LawnBattle.Helpers.TeamHelper ThisTeamHelper = new Helpers.TeamHelper();
-            ThisTeamHelper.CreateRandomTeams(GetPlayers);
+            //var GetPlayers = ThisContext.Players.Take(12).ToList();
+            //LawnBattle.Helpers.TeamHelper ThisTeamHelper = new Helpers.TeamHelper();
+            //ThisTeamHelper.CreateRandomTeams(GetPlayers);
 
             
             return View();

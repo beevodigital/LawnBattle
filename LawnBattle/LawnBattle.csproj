@@ -209,6 +209,7 @@
     <Content Include="Public\Javascript\jquery.bracket.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\File.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -257,6 +258,9 @@
     <Content Include="Views\Games\Details.cshtml" />
     <Content Include="Views\Games\Edit.cshtml" />
     <Content Include="Views\Games\Index.cshtml" />
+    <Content Include="Views\Tournaments\_types\DoubleElimination.cshtml" />
+    <Content Include="Views\Tournaments\_types\SingleEliminationSharp.cshtml" />
+    <Content Include="Views\Tournaments\_types\SingleElimination.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201405260306527_Initial.resx">
