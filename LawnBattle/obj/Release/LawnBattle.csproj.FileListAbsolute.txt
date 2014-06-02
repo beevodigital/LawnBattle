@@ -44,3 +44,4 @@ C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Release\LawnBattle.Migrations.d
 C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Release\LawnBattle.csproj.GenerateResource.Cache
 C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Release\LawnBattle.dll
 C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Release\LawnBattle.pdb
+C:\Projects\LawnBattle\LawnBattle\LawnBattle\obj\Release\LawnBattle.Migrations.addedJSONstate.resources

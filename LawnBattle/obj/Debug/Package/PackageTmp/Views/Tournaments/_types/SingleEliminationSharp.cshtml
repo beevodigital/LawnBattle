@@ -1,0 +1,111 @@
+﻿@model LawnBattle.Models.Tournament
+
+<div id="minimal">
+    <script>
+        $(document).ready(function () {
+            // Handler for .ready() called.
+            var minimalData = {
+                teams: [
+                    @{
+                        int LoopCounter = 0;
+                        int firstRoundSize = (Model.Teams.Count / 2);
+                        foreach(var ThisGame in Model.Games.Take(firstRoundSize))
+                        {
+                            //turnung out to be more work than anticipated
+                            string Team1 = "null";
+                            string Team2 = "null";
+                            string TempBuilder = "";
+
+                            //create Team1
+                            TempBuilder = "[";
+                            //make sure Team1 is valid
+                            if(ThisGame.Team1 != null && ThisGame.Team1.Player1 != null && ThisGame.Team1.Player2 != null)
+                            {
+                                TempBuilder += "\"" + ThisGame.Team1.Player1.Name + " / " + ThisGame.Team1.Player2.Name + "\",";
+                            }
+                            else
+                            {
+                                TempBuilder += "\" \",";
+                            }
+
+                            if (ThisGame.Team2 != null && ThisGame.Team2.Player1 != null && ThisGame.Team2.Player2 != null)
+                            {
+                                TempBuilder += "\"" + ThisGame.Team2.Player1.Name + " / " + ThisGame.Team2.Player2.Name + "\"]";
+                            }
+                            else
+                            {
+                                TempBuilder += "\" \"]";
+                            }
+
+                            //do we need a comma at the end?
+                            if ((LoopCounter + 1) < Model.Games.Take(firstRoundSize).Count())
+                                {
+                                TempBuilder += ",";
+                                }
+                            LoopCounter++;
+
+                            @Html.Raw(TempBuilder);
+
+                        }
+
+                    }
+                ], @{
+                    //results are more complicated
+                    //every game for the tourny is in the database, so we need to smartly loop over them and break out rounds
+                    int RoundSize = firstRoundSize; //this is half of the team counts
+                    int Counter = 1; //not zero based forthis loop
+                    int GameCounter = 1;
+                    string resultsBuilder = "["; //opening bracket for first round
+                    foreach(var ThisGame in Model.Games)
+                        {
+                            var Team1Result = "null";
+                            var Team2Result = "null";
+
+                            if(ThisGame.GameStatus != (int)LawnBattle.Helpers.enums.GameStatus.Complete)
+                            {
+                                //the game is not done, no points to mark
+                                resultsBuilder += "[null,null]";
+                            }
+                            else
+                            {
+                                resultsBuilder += "[" + ThisGame.Team1Score + "," + ThisGame.Team2Score + "]";
+                            }
+
+                            //resultsBuilder += "[1,0]";
+                            if(Counter.Equals(RoundSize))
+                            {
+                                //we have reached the end of the round, so end it
+                                RoundSize = (RoundSize / 2);
+                                Counter = 0;
+                                if(RoundSize > 0)
+                                {
+                                    //another rounds to come
+                                    resultsBuilder += "],[";
+                                }
+                                else
+                                {
+                                    resultsBuilder += "]";
+                                }
+
+                            }
+                            else
+                            {
+                                //there is another game coming?
+                                resultsBuilder += ",";
+                            }
+                            Counter++;
+                            GameCounter++;
+                        }
+                    }
+                    results: [[@Html.Raw(resultsBuilder)]]
+            }
+
+            $(function () {
+                $('#minimal').bracket({
+                    init: minimalData /* data to initialize the bracket with */
+                })
+            })
+        });
+    </script>
+
+</div>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="lawnbattle" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Projects\\LawnBattle\\LawnBattle\\LawnBattle\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Projects\\LawnBattle\\LawnBattle\\LawnBattle\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="LawnBattleContext-Web.config Connection String" description="" value="Data Source=tcp:cio4041emi.database.windows.net,1433;Initial Catalog=lawnbattle;User Id=dbuser@cio4041emi;Password=ONE5four!@#" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Projects\\LawnBattle\\LawnBattle\\LawnBattle\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='LawnBattleContext']/@connectionString" />
+  </parameter>
+</parameters>

@@ -5,20 +5,47 @@
     @{
         List<object> TheTeams = new List<object>();
         
-        foreach(var ThisTeam in Model.Teams)
+        foreach(var ThisGame in Model.Games)
         {
-            List<string> Players = new List<string>();
+            List<LawnBattle.Helpers.TeamForJSBracket> Players = new List<LawnBattle.Helpers.TeamForJSBracket>();
             //work on the first team:
-            if(ThisTeam.Player1 != null && ThisTeam.Player2 != null)
+            if (ThisGame.Team1 != null && ThisGame.Team1.Player1 != null && ThisGame.Team1.Player2 != null)
             {
                 //real people
-                Players.Add(ThisTeam.Player1.Name + " / " + ThisTeam.Player2.Name);
+                LawnBattle.Helpers.TeamForJSBracket ThisJSTeam = new LawnBattle.Helpers.TeamForJSBracket();
+                ThisJSTeam.Name = ThisGame.Team1.Player1.Name + " / " + ThisGame.Team1.Player2.Name;
+                ThisJSTeam.ID = ThisGame.Team1.ID;
+                //Players.Add(ThisTeam.Player1.Name + " / " + ThisTeam.Player2.Name);
+                Players.Add(ThisJSTeam);
             }
             else
             {
-                Players.Add("BYE");
+                LawnBattle.Helpers.TeamForJSBracket ThisJSTeam = new LawnBattle.Helpers.TeamForJSBracket();
+                ThisJSTeam.Name = "BYE";
+                ThisJSTeam.ID = 0;
+                //Players.Add(ThisTeam.Player1.Name + " / " + ThisTeam.Player2.Name);
+                Players.Add(ThisJSTeam);
             }
-            Players.Add("Team 2");
+            //TheTeams.Add(Players);
+
+            //work on the secind team:
+            if (ThisGame.Team2 != null && ThisGame.Team2.Player1 != null && ThisGame.Team2.Player2 != null)
+            {
+                //real people
+                LawnBattle.Helpers.TeamForJSBracket ThisJSTeam = new LawnBattle.Helpers.TeamForJSBracket();
+                ThisJSTeam.Name = ThisGame.Team2.Player1.Name + " / " + ThisGame.Team2.Player2.Name;
+                ThisJSTeam.ID = ThisGame.Team2.ID;
+                //Players.Add(ThisTeam.Player1.Name + " / " + ThisTeam.Player2.Name);
+                Players.Add(ThisJSTeam);
+            }
+            else
+            {
+                LawnBattle.Helpers.TeamForJSBracket ThisJSTeam = new LawnBattle.Helpers.TeamForJSBracket();
+                ThisJSTeam.Name = "BYE";
+                ThisJSTeam.ID = 0;
+                //Players.Add(ThisTeam.Player1.Name + " / " + ThisTeam.Player2.Name);
+                Players.Add(ThisJSTeam);
+            }
             TheTeams.Add(Players);
         }
         
@@ -32,8 +59,35 @@
 <div class="row">
     <div id="bracket">
         <script>
+            //TODO: working on creating a json object hat gives us every game and its scores (and its team).
+            var ResultsArray = [];
+
             function saveFn(data, userData) {
+                //ajax call to update the json
+                var data = JSON.stringify($('#bracket').bracket('data'));
+                console.log(data);
+                $.ajax({
+                    url: userData,
+                    type:"POST",
+                    data: {JSONScore : data}
+                });
+
                 console.log("saving");
+                console.log(ResultsArray);
+
+                //are the last two scores filled out?
+                if(ResultsArray[ResultsArray.length -1].score != "--" && ResultsArray[ResultsArray.length -2].score != "--")
+                {
+                    alert('tourny over');
+                    console.log(ResultsArray);
+
+                    //send to server and clear array for the next edit
+                    //tourny over!
+                }
+                else
+                {
+                    ResultsArray = [];
+                }
             }
 
             function matchClicked(data, arg2) {
@@ -50,31 +104,61 @@
             /* Render function is called for each team label when data is changed, data
              * contains the data object given in init and belonging to this slot. */
             function render_fn(container, data, score) {
-                console.log("in render");
+                //console.log(data);
+                //console.log(score);
 
-                container.append(data.name);
+                //start adding games to the array. Order is very important
+                //we are going to clear and add it everytime. Then, we are going to check the final two scores and see if they are valid
+                var ThisGame = {};
+                ThisGame = { TeamID : data.ID, TeamName: data.Name, score : score };
+                ResultsArray.push(ThisGame);
+
+
+                container.append(data.Name);
+            }
+
+            @{
+                //check if we have results
+                string ResultsJson = "[[[[]]], [], []]";
+                if (Model.JSONstate.Length > 3)
+                { 
+                    ResultsJson = HttpUtility.UrlDecode(Model.JSONstate);
+                }    
             }
 
             $(document).ready(function () {
-                var doubleElimination = {
-                    "teams":@Html.Raw(TeamJson)
-                        ,
-                    "results": [[[[]]], [], []]
-                }
+                var doubleElimination = 
+                    @if (Model.JSONstate.Length > 3)
+                    { 
+                        <text>
+                            @Html.Raw(ResultsJson)
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                        {"teams":@Html.Raw(TeamJson)
+                               ,
+                            "results": [[[[]]], [], []]}
+                        </text>
+                    } 
+                   
+                
 
                 $(function () {
                     $('#bracket').bracket({
+                        skipConsolationRound: true,
                         init: doubleElimination,
                         save: saveFn,
-                        userData: "",
-                        //decorator: {
-                        //    edit: edit_fn,
-                        //    render: render_fn
-                        //}
+                        userData: "@Url.RouteUrl("EventsTournaments", new { eventSlug = Model.Event.EventKey, action = "SaveJSON", id = Model.ID })",
+                        decorator: {
+                            edit: edit_fn,
+                            render: render_fn
+                        }
                         //onMatchClick: matchClicked
                     })
                 })
             });
-        </script>
+</script>
     </div>
 </div>
