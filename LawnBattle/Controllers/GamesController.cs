@@ -73,6 +73,43 @@ namespace LawnBattle.Controllers
             return View(game);
         }
 
+        [HttpGet]
+        public ActionResult Start(string eventSlug, int tournamentid, int id)
+        {
+            var GetGame = db.Games.Where(x => x.ID.Equals(id)).Where(x => x.Tournament.Event.EventKey.Equals(eventSlug)).FirstOrDefault();
+            if (GetGame != null)
+                GetGame.GameStatus = (int)LawnBattle.Helpers.enums.GameStatus.InProgress;
+
+            db.Entry(GetGame).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToRoute("EventsTournaments", new { eventSlug = eventSlug, action = "details", id = tournamentid });
+        }
+
+        [HttpGet]
+        public ActionResult UpdateScore(string eventSlug, int tournamentid, int id, int WinningTeam)
+        {
+            var GetGame = db.Games.Where(x => x.ID.Equals(id)).Where(x => x.Tournament.Event.EventKey.Equals(eventSlug)).FirstOrDefault();
+            if (GetGame != null)
+            {
+                GetGame.GameStatus = (int)LawnBattle.Helpers.enums.GameStatus.Complete;
+                if(WinningTeam.Equals(1))
+                {
+                    GetGame.Team1Score = 1;
+                    GetGame.Team2Score = 0;
+                }
+                else
+                {
+                    GetGame.Team1Score = 0;
+                    GetGame.Team2Score = 1;
+                }
+            }
+               
+
+            db.Entry(GetGame).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToRoute("EventsTournaments", new { eventSlug = eventSlug, action = "details", id = tournamentid });
+        }
+
         // POST: /Games/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -93,38 +130,42 @@ namespace LawnBattle.Controllers
                     db.Entry(game).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    //need to grab the game from the db to get lazy objects
-                    var LoadGame = db.Games.Where(x => x.ID.Equals(game.ID)).Include(x => x.Tournament).Include(x => x.Team1).Include(x => x.Team2).FirstOrDefault();
+                    if (1 == 2)
+                    {
 
-                    //since it is complete, we need to move the winner over to the next game
-                    //ONLY if the current game slot is not 2 (championship round)
-                    if(game.GameSlot < (LoadGame.Tournament.Games.Count - 1))
-                    { 
-                        var WinningTeam = new Team();
-                        if (game.Team1Score > game.Team2Score)
-                            WinningTeam = LoadGame.Team1;
-                        else
-                            WinningTeam = LoadGame.Team2;
+                        //need to grab the game from the db to get lazy objects
+                        var LoadGame = db.Games.Where(x => x.ID.Equals(game.ID)).Include(x => x.Tournament).Include(x => x.Team1).Include(x => x.Team2).FirstOrDefault();
 
-                        int CurrentGameSlot = game.GameSlot + 1;
-                        int NumberOfTeams = LoadGame.Tournament.Teams.Count;
+                        //since it is complete, we need to move the winner over to the next game
+                        //ONLY if the current game slot is not 2 (championship round)
+                        if (game.GameSlot < (LoadGame.Tournament.Games.Count - 1))
+                        {
+                            var WinningTeam = new Team();
+                            if (game.Team1Score > game.Team2Score)
+                                WinningTeam = LoadGame.Team1;
+                            else
+                                WinningTeam = LoadGame.Team2;
 
-                        int NewGameSlot = ((NumberOfTeams / 2) + (int)Math.Ceiling((double)CurrentGameSlot / 2)) - 1;
+                            int CurrentGameSlot = game.GameSlot + 1;
+                            int NumberOfTeams = LoadGame.Tournament.Teams.Count;
 
-                        //grab the new Game by slot and update date
-                        var NewGame = db.Games.Where(x => x.GameSlot.Equals(NewGameSlot)).Where(x => x.Tournament.ID.Equals(LoadGame.Tournament.ID)).FirstOrDefault();
-                        if (game.GameSlot % 2 == 0)
-                            NewGame.Team1 = WinningTeam;
-                        else
-                            NewGame.Team2 = WinningTeam;
+                            int NewGameSlot = ((NumberOfTeams / 2) + (int)Math.Ceiling((double)CurrentGameSlot / 2)) - 1;
 
-                        if(NewGame.Team1 != null && NewGame.Team2 != null)
-                            NewGame.GameStatus = (int)LawnBattle.Helpers.enums.GameStatus.New;
+                            //grab the new Game by slot and update date
+                            var NewGame = db.Games.Where(x => x.GameSlot.Equals(NewGameSlot)).Where(x => x.Tournament.ID.Equals(LoadGame.Tournament.ID)).FirstOrDefault();
+                            if (game.GameSlot % 2 == 0)
+                                NewGame.Team1 = WinningTeam;
+                            else
+                                NewGame.Team2 = WinningTeam;
 
-                        db.Entry(NewGame).State = EntityState.Modified;
-                        db.SaveChanges();
+                            if (NewGame.Team1 != null && NewGame.Team2 != null)
+                                NewGame.GameStatus = (int)LawnBattle.Helpers.enums.GameStatus.New;
+
+                            db.Entry(NewGame).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        string stophere = "";
                     }
-                    string stophere = "";
                 }
                 else
                 {

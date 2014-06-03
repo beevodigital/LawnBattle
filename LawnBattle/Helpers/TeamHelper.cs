@@ -181,6 +181,30 @@ namespace LawnBattle.Helpers
             }
         }
 
+        public List<Game> RoundRobinCreateGames(List<Team> HumanTeams)
+        {
+            //first lets create an array that we will stuff the Teams into for now
+            List<Game> TheseGames = new List<Game>();
+                        
+            for(int i = 0; i < HumanTeams.Count; i++)
+            {
+                //Team Team1 = HumanTeams.ElementAt(i);
+                //now, remove this team, since it can not play with itself
+                
+                //create a game for each team left
+                if(i < HumanTeams.Count - 1)
+                {
+                    foreach (var NextTeam in HumanTeams.Skip(i + 1))
+                    {
+                        Game NewGame = new Game { GameStatus = (int)LawnBattle.Helpers.enums.GameStatus.New, Team1 = HumanTeams.ElementAt(i), Team2 = NextTeam };
+                        TheseGames.Add(NewGame);
+                    }
+                }
+            }
+
+            return TheseGames;
+        }
+
         public List<Game> EliminationCreateGames(List<Team> HumanTeams, List<Team> FakeTeams, int BracketSize)
         {
             //we need to create our first round games
@@ -252,5 +276,12 @@ namespace LawnBattle.Helpers
     {
         public string Name { get; set; }
         public int ID { get; set; }
+    }
+
+    public class TeamsForRR
+    {
+        public string Name { get; set; }
+        public int Wins { get; set; }
+        public int Losses { get; set; }
     }
 }

@@ -1,0 +1,156 @@
+﻿@model LawnBattle.Models.Tournament
+@using System.Web.Script.Serialization; 
+
+<div class="row">
+    <div class="col-md-4">
+        <h4>Standings</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tr>
+                <th>Team</th>
+                <th>Wins</th>
+                <th>Losses</th>
+            </tr>
+            @{
+                List<LawnBattle.Helpers.TeamsForRR> RoundRobinTeams = new List<LawnBattle.Helpers.TeamsForRR>();
+                foreach(var ThisTeam in Model.Teams)
+                {
+                    //lets get the data
+                    var getGames = ThisTeam.Tournament.Games.ToList();
+                    int GamesWon = 0;
+                    int GamesLost = 0;
+
+                    var CompletedGames = getGames.Where(x => x.GameStatus.Equals((int)LawnBattle.Helpers.enums.GameStatus.Complete)).ToList();
+                    
+                    if(CompletedGames != null)
+                    {
+                        var GetTeam1Games = CompletedGames.Where(x => x.Team1.Equals(ThisTeam)).ToList();
+                        foreach (var ThisGame in GetTeam1Games)
+                        {
+                            if (ThisGame.Team1Score > ThisGame.Team2Score)
+                            {
+                                GamesWon++;
+                            }
+                            else
+                            {
+                                GamesLost++;
+                            }
+                        }
+
+                        var GetTeam2Games = CompletedGames.Where(x => x.Team2.Equals(ThisTeam)).ToList();
+                        foreach (var ThisGame in GetTeam2Games)
+                        {
+                            if (ThisGame.Team2Score > ThisGame.Team1Score)
+                            {
+                                GamesWon++;
+                            }
+                            else
+                            {
+                                GamesLost++;
+                            }
+                        }
+                    }
+                    RoundRobinTeams.Add(new LawnBattle.Helpers.TeamsForRR { Name = ThisTeam.Player1.Name + " / " + ThisTeam.Player2.Name, Wins = GamesWon, Losses = GamesLost });
+                    
+                }
+                
+                foreach(var ThisTeam in RoundRobinTeams.OrderByDescending(x => x.Wins).ToList())
+                {
+                    <tr>
+                        <td>@ThisTeam.Name</td>
+                        <td>@ThisTeam.Wins</td>
+                        <td>@ThisTeam.Losses</td>
+                    </tr>
+                }
+            }
+            
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h4>Games In Progress - Click the Winner</h4>
+    </div>
+</div>
+
+    
+ @foreach (var ThisGame in Model.Games.Where(x => x.GameStatus.Equals((int)LawnBattle.Helpers.enums.GameStatus.InProgress)).ToList())
+{
+    <div class="row">
+        <div class="col-xs-6">
+            <p>
+                <a href="@Url.RouteUrl("EventsTournamentGames", new { eventSlug = Model.Event.EventKey, tournamentid = Model.ID, action = "UpdateScore", id = ThisGame.ID, winningTeam = 1 })">
+                    <button type="button" class="btn btn-default btn-block">@ThisGame.Team1.Player1.Name / @ThisGame.Team1.Player2.Name</button>
+                </a>
+            </p>
+        </div>
+        <div class="col-xs-1">
+            <p>
+               vs
+            </p>
+        </div>
+        <div class="col-xs-5">
+            <p>
+                <a href="@Url.RouteUrl("EventsTournamentGames", new { eventSlug = Model.Event.EventKey, tournamentid = Model.ID, action = "UpdateScore", id = ThisGame.ID, winningTeam = 2 })">
+                    <button type="button" class="btn btn-default btn-block">@ThisGame.Team2.Player1.Name / @ThisGame.Team2.Player2.Name</button>
+                </a>
+            </p>
+        </div>
+    </div>
+}
+    
+
+
+<div class="row">
+    <div class="col-md-4">
+        <h4>Games Waiting - Click to Start</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var ThisGame in Model.Games.Where(x => x.GameStatus.Equals((int)LawnBattle.Helpers.enums.GameStatus.New)).ToList())
+        {
+            <p>
+                <a href="@Url.RouteUrl("EventsTournamentGames", new { eventSlug = Model.Event.EventKey, tournamentid = Model.ID, action = "Start", id = ThisGame.ID })">
+                    <button type="button" class="btn btn-default btn-block">@ThisGame.Team1.Player1.Name / @ThisGame.Team1.Player2.Name vs @ThisGame.Team2.Player1.Name / @ThisGame.Team2.Player2.Name</button>
+                </a>
+            </p>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h4>Games Complete - Click the Winner</h4>
+    </div>
+</div>
+
+
+@foreach (var ThisGame in Model.Games.Where(x => x.GameStatus.Equals((int)LawnBattle.Helpers.enums.GameStatus.Complete)).ToList())
+{
+    <div class="row">
+        <div class="col-xs-6">
+            <p>
+                <a href="@Url.RouteUrl("EventsTournamentGames", new { eventSlug = Model.Event.EventKey, tournamentid = Model.ID, action = "UpdateScore", id = ThisGame.ID, winningTeam = 1 })">
+                    <button type="button" class="btn btn-default @(ThisGame.Team1Score < ThisGame.Team2Score ? "btn-default" : "btn-success") btn-block">@ThisGame.Team1.Player1.Name / @ThisGame.Team1.Player2.Name</button>
+                </a>
+            </p>
+        </div>
+        <div class="col-xs-1">
+            <p>
+                vs
+            </p>
+        </div>
+        <div class="col-xs-5">
+            <p>
+                <a href="@Url.RouteUrl("EventsTournamentGames", new { eventSlug = Model.Event.EventKey, tournamentid = Model.ID, action = "UpdateScore", id = ThisGame.ID, winningTeam = 2 })">
+                    <button type="button" class="btn btn-default @(ThisGame.Team1Score > ThisGame.Team2Score ? "btn-default" : "btn-success") btn-block">@ThisGame.Team2.Player1.Name / @ThisGame.Team2.Player2.Name</button>
+                </a>
+            </p>
+        </div>
+    </div>
+}

@@ -132,6 +132,8 @@ namespace LawnBattle.Controllers
                     db.SaveChanges();
                     teamNumber++;
                 }
+                //regrab them from the db
+                MakeTeams = db.Teams.Where(x => x.Tournament.ID.Equals(tournament.ID)).Where(x => x.IsHuman.Equals(true)).ToList();
 
                 //find out what size tournament this is
                 int BracketSize = 1;
@@ -142,36 +144,74 @@ namespace LawnBattle.Controllers
                 //MakeTeams = real teams
                 //Bracksize = first round games
                 //needed fale teams = bracketsize - MakeTeams.count
-                var FakeTeams = ThisTeamHelper.CreateFakeTeams(BracketSize - MakeTeams.Count);
-                foreach (var ThisTeam in FakeTeams)
-                {
-                    Team NewTeam = new Team { IsHuman = false, Tournament = tournament };
-                    db.Teams.Add(NewTeam);
-                    db.SaveChanges();
-                }
+                
 
                 //at this point, we have all of our teams!
                 //get all the teams in once list
                 //List<Team> AllTeams = MakeTeams.Concat(FakeTeams).ToList();
-
-                var CreatedGames = ThisTeamHelper.EliminationCreateGames(MakeTeams, FakeTeams, BracketSize);
-
-                foreach (var ThisGame in CreatedGames)
-                {
-                    ThisGame.Tournament = tournament;
-                    db.Games.Add(ThisGame);
-                    db.SaveChanges();
-                }
-
                 //start creating games
                 //Double Elimination
                 if(tournament.TournamentType == 2)
                 {
+                    var FakeTeams = ThisTeamHelper.CreateFakeTeams(BracketSize - MakeTeams.Count);
+                    foreach (var ThisTeam in FakeTeams)
+                    {
+                        Team NewTeam = new Team { IsHuman = false, Tournament = tournament };
+                        db.Teams.Add(NewTeam);
+                        db.SaveChanges();
+                    }
+                    FakeTeams = db.Teams.Where(x => x.Tournament.ID.Equals(tournament.ID)).Where(x => x.IsHuman.Equals(false)).ToList();
+
+                    var CreatedGames = ThisTeamHelper.EliminationCreateGames(MakeTeams, FakeTeams, BracketSize);
+
+                    foreach (var ThisGame in CreatedGames)
+                    {
+                        ThisGame.Tournament = tournament;
+                        db.Games.Add(ThisGame);
+                        db.SaveChanges();
+                    }
+
+
                     //send them to the page
                     return RedirectToRoute("EventsTournaments", new { eventSlug = eventSlug, action = "details", id = tournament.ID });
                 }
-                if (tournament.TournamentType == 3)
+                else if (tournament.TournamentType == 3)
                 {
+                    var FakeTeams = ThisTeamHelper.CreateFakeTeams(BracketSize - MakeTeams.Count);
+                    foreach (var ThisTeam in FakeTeams)
+                    {
+                        Team NewTeam = new Team { IsHuman = false, Tournament = tournament };
+                        db.Teams.Add(NewTeam);
+                        db.SaveChanges();
+                    }
+                    FakeTeams = db.Teams.Where(x => x.Tournament.ID.Equals(tournament.ID)).Where(x => x.IsHuman.Equals(false)).ToList();
+
+                    var CreatedGames = ThisTeamHelper.EliminationCreateGames(MakeTeams, FakeTeams, BracketSize);
+
+                    foreach (var ThisGame in CreatedGames)
+                    {
+                        ThisGame.Tournament = tournament;
+                        db.Games.Add(ThisGame);
+                        db.SaveChanges();
+                    }
+
+
+                    //send them to the page
+                    return RedirectToRoute("EventsTournaments", new { eventSlug = eventSlug, action = "details", id = tournament.ID });
+                }
+                else if (tournament.TournamentType == 4)
+                {
+                    //round robin
+                    var CreatedGames = ThisTeamHelper.RoundRobinCreateGames(MakeTeams);
+
+                    foreach (var ThisGame in CreatedGames)
+                    {
+                        ThisGame.Tournament = tournament;
+                        db.Games.Add(ThisGame);
+                        db.SaveChanges();
+                    }
+
+
                     //send them to the page
                     return RedirectToRoute("EventsTournaments", new { eventSlug = eventSlug, action = "details", id = tournament.ID });
                 }

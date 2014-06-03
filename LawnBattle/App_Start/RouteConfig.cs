@@ -37,8 +37,8 @@ namespace LawnBattle
 
             routes.MapRoute(
                 name: "EventsTournamentGames",
-                url: "events/{eventSlug}/tournaments/details/{tournamentid}/game/{action}/{id}",
-                defaults: new { controller = "games", action = "index", eventSlug = UrlParameter.Optional, id = UrlParameter.Optional }
+                url: "events/{eventSlug}/tournaments/details/{tournamentid}/game/{action}/{id}/{winningTeam}",
+                defaults: new { controller = "games", action = "index", eventSlug = UrlParameter.Optional, id = UrlParameter.Optional, winningTeam = UrlParameter.Optional }
             );
 
             routes.MapRoute(
@@ -62,7 +62,7 @@ namespace LawnBattle
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "events", action = "create", id = UrlParameter.Optional }
             );
         }
     }

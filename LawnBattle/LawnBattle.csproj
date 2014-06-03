@@ -266,6 +266,7 @@
     <Content Include="Views\Tournaments\_types\DoubleElimination.cshtml" />
     <Content Include="Views\Tournaments\_types\SingleEliminationSharp.cshtml" />
     <Content Include="Views\Tournaments\_types\SingleElimination.cshtml" />
+    <Content Include="Views\Tournaments\_types\RoundRobin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201405260306527_Initial.resx">

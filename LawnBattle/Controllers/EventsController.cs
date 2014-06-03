@@ -32,7 +32,7 @@ namespace LawnBattle.Controllers
                     return Redirect("/events/" + Request.Form["EventKey"]);
                 }
                 else
-                    return View("Create");
+                    return Redirect("/?Found=Nope");
             }
             return View(db.Events.ToList());
         }
@@ -70,6 +70,8 @@ namespace LawnBattle.Controllers
         // GET: /Event/Create
         public ActionResult Create()
         {
+            if(Request.QueryString["Found"] != null)
+                ModelState.AddModelError("", "Event Code Not Found");
             return View();
         }
 
@@ -143,8 +145,37 @@ namespace LawnBattle.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Event @event = db.Events.Find(id);
-            db.Events.Remove(@event);
+            Event ThisEvent = db.Events.Find(id);
+
+            var GetTournaments = db.Tournaments.Where(x => x.Event.ID.Equals(ThisEvent.ID)).ToList();
+            foreach (var ThisTourny in GetTournaments)
+            {
+                var GetGames = db.Games.Where(x => x.Tournament.ID.Equals(ThisTourny.ID)).ToList();
+                foreach (var ThisGame in GetGames)
+                {
+                    db.Games.Remove(ThisGame);
+                    db.SaveChanges();
+                }
+
+                var GetTeams = db.Teams.Where(x => x.Tournament.ID.Equals(ThisTourny.ID)).ToList();
+                foreach (var ThisTeam in GetTeams)
+                {
+                    db.Teams.Remove(ThisTeam);
+                    db.SaveChanges();
+                }
+
+                db.Tournaments.Remove(ThisTourny);
+                db.SaveChanges();
+            }
+
+            var GetPlayers = db.Players.Where(x => x.Event.ID.Equals(ThisEvent.ID)).ToList();
+            foreach (var ThisPlayer in GetPlayers)
+            {
+                db.Players.Remove(ThisPlayer);
+                db.SaveChanges();
+            }
+
+            db.Events.Remove(ThisEvent);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

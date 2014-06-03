@@ -29,6 +29,10 @@
         {
             @Html.Partial("~/Views/Tournaments/_types/SingleElimination.cshtml", Model)
         }
+        else if (Model.TournamentType == 4)
+        {
+            @Html.Partial("~/Views/Tournaments/_types/RoundRobin.cshtml", Model)
+        }
     </div>
 </div>
 
@@ -79,7 +83,7 @@
                         <ul>
                             @foreach(var ThisGame in Model.Games.Where(x => x.GameStatus.Equals((int)LawnBattle.Helpers.enums.GameStatus.InProgress)))
                             {
-                                <li>@ThisGame.Team1.Player1.Name vs @ThisGame.Team2.Player1.Name<a href="@(Request.Url.AbsoluteUri)/game/edit/@ThisGame.ID">Score Game!</a></li>
+                                <li>@ThisGame.Team1.Player1.Name / @ThisGame.Team1.Player2.Name vs @ThisGame.Team2.Player1.Name / @ThisGame.Team2.Player2.Name<a href="@(Request.Url.AbsoluteUri)/game/edit/@ThisGame.ID">Score Game!</a></li>
                             }
                         </ul>
                     </li>
@@ -87,7 +91,7 @@
                         <ul>
                             @foreach (var ThisGame in Model.Games.Where(x => x.GameStatus.Equals((int)LawnBattle.Helpers.enums.GameStatus.New)))
                             {
-                                <li>@(ThisGame.Team1 != null ? ThisGame.Team1.Player1.Name : "Waiting") vs @(ThisGame.Team2 != null && ThisGame.Team2.Player1 != null ? ThisGame.Team2.Player1.Name : "Waiting")<a href="@(Request.Url.AbsoluteUri)/game/edit/@ThisGame.ID">Start!</a></li>
+                                 <li>@ThisGame.Team1.Player1.Name / @ThisGame.Team1.Player2.Name vs @ThisGame.Team2.Player1.Name / @ThisGame.Team2.Player2.Name<a href="@(Request.Url.AbsoluteUri)/game/edit/@ThisGame.ID">Score Game!</a></li>
                             }
                         </ul>
 
