@@ -53,14 +53,24 @@ namespace LawnBattle.Controllers
             player.Email = "";
             player.IsActive = true;
             player.IsHuman = true;
+
+            var ThesePlayers = Request.Form["Name"].Split(',').ToList();
+
             ViewBag.eventSlug = eventSlug;
             var GetEvent = db.Events.Where(x => x.EventKey.Equals(eventSlug)).FirstOrDefault();
 
-            if (ModelState.IsValid && GetEvent != null)
+            if (ModelState.IsValid && ThesePlayers.Count > 0)
             {
-                player.Event = GetEvent;
-                db.Players.Add(player);
-                db.SaveChanges();
+                //create a player for of the names entered
+                foreach (string ThisName in ThesePlayers)
+                {
+                    Player ThisPlayer = new Player { Name = ThisName, IsHuman = true, IsActive = true, Email = "", Event = GetEvent };
+                    db.Players.Add(ThisPlayer);
+                    db.SaveChanges();
+                }
+                //player.Event = GetEvent;
+                //db.Players.Add(player);
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 

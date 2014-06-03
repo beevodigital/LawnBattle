@@ -13,13 +13,11 @@ namespace LawnBattle
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            /*
             routes.MapRoute(
-                name: "EventListing",
-                url: "events/list/{id}",
-                defaults: new { controller = "events", action = "index", id = UrlParameter.Optional }
+                name: "LeaveEvnet",
+                url: "events/seeya",
+                defaults: new { controller = "events", action = "seeya", id = UrlParameter.Optional }
             );
-            */
 
             routes.MapRoute(
                 name: "EventsManage",

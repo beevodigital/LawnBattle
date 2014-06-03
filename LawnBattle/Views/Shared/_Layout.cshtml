@@ -21,13 +21,18 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Lawn Battle", "Index", "Home", null, new { @class = "navbar-brand" })
+                <a class="navbar-brand" href="/">Lawn Battle</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    @if (Session["Event"] != null)
+                    {
+                        LawnBattle.Models.Event ThisEvent = (LawnBattle.Models.Event)Session["Event"];
+                        <li><a href="/">Tournaments</a></li>
+                        <li>@Html.RouteLink("Players","EventsPlayers", new { eventSlug = ThisEvent.EventKey, action = "index" })</li>
+                        <li><a href="/events/seeya">Exit Event</a></li>
+                    }
+                    
                 </ul>
             </div>
         </div>

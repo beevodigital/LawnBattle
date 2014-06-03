@@ -5,6 +5,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script>
+    $(function () {
+        var scntDiv = $('#PlayerContainer');
+        var i = $('#PlayerContainer .player-block').size() + 1;
+
+        $('#addScnt').click(function () {
+            $('#PlayerContainer .player-block').first().clone().appendTo("#PlayerContainer");
+
+            $('#PlayerContainer .player-block').last().find('input').val('');
+            return false;
+        });
+
+    });
+</script>
+
 <h2>Adding Player</h2>
 
 
@@ -12,24 +27,25 @@
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
+    <div class="form-horizontal" id="">
         
         @Html.ValidationSummary(true)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
-            <div class="col-md-12">
-                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Name)
+        <div id="PlayerContainer">
+            <div class="form-group player-block">
+                @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
             </div>
         </div>
-
+        <p><a href="#" id="addScnt">Add Another Player</a></p>
         
 
         <div class="form-group">
             <div class="col-md-12">
                 <p>
-                    <input type="submit" value="Add" class="btn btn-success btn-block" />
+                    <input type="submit" value="Save" class="btn btn-success btn-block" />
                 </p>
             </div>
         </div>

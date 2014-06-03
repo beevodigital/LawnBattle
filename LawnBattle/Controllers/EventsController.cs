@@ -20,6 +20,12 @@ namespace LawnBattle.Controllers
             return View(db.Events.ToList());
         }
 
+        public ActionResult seeya()
+        {
+            Session.Clear();
+            return Redirect("/");
+        }
+
         public ActionResult ReRoute()
         {
             if(Request.Form["EventKey"] != null && Request.Form["EventKey"] != "")
@@ -29,6 +35,7 @@ namespace LawnBattle.Controllers
 
                 if (GetEvent != null)
                 {
+                    Session["Event"] = GetEvent;
                     return Redirect("/events/" + Request.Form["EventKey"]);
                 }
                 else
@@ -70,6 +77,12 @@ namespace LawnBattle.Controllers
         // GET: /Event/Create
         public ActionResult Create()
         {
+            if(Session["Event"] != null)
+            {
+                Event ThisEvent = (Event)Session["Event"];
+                return RedirectToRoute("EventSlug", new { id = ThisEvent.EventKey  });
+            }
+
             if(Request.QueryString["Found"] != null)
                 ModelState.AddModelError("", "Event Code Not Found");
             return View();
@@ -87,6 +100,7 @@ namespace LawnBattle.Controllers
                 @event.EventKey = @event.Name;
                 db.Events.Add(@event);
                 db.SaveChanges();
+                Session["Event"] = @event;
                 return Redirect("/events/" + @event.EventKey);
                 //return RedirectToAction("Index");
             }
