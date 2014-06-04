@@ -65,22 +65,16 @@
             function saveFn(data, userData) {
                 //ajax call to update the json
                 var data = JSON.stringify($('#bracket').bracket('data'));
-                console.log(data);
                 $.ajax({
                     url: userData,
                     type:"POST",
                     data: {JSONScore : data}
                 });
 
-                console.log("saving");
-                console.log(ResultsArray);
-
                 //are the last two scores filled out?
                 if(ResultsArray[ResultsArray.length -1].score != "--" && ResultsArray[ResultsArray.length -2].score != "--")
                 {
                     alert('tourny over');
-                    console.log(ResultsArray);
-
                     //send to server and clear array for the next edit
                     //tourny over!
                 }
