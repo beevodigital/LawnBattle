@@ -14,6 +14,7 @@
             $('#PlayerContainer .player-block').first().clone().appendTo("#PlayerContainer");
 
             $('#PlayerContainer .player-block').last().find('input').val('');
+            $('#PlayerContainer label').last().hide();
             return false;
         });
 
@@ -27,21 +28,30 @@
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal" id="">
+    <div class="form-horizontal">
         
         @Html.ValidationSummary(true)
         <div id="PlayerContainer">
             <div class="form-group player-block">
-                @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
-                <div class="col-md-12">
+                <div class="col-md-1">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+                </div>
+                <div class="col-md-11">
                     @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Name)
                 </div>
             </div>
         </div>
-        <p><a href="#" id="addScnt">Add Another Player</a></p>
         
-
+        <div class="form-group">
+            <div class="col-md-12">
+                <p>
+                    <a href="@Url.RouteUrl("EventsPlayers", new { eventSlug = ViewBag.eventSlug, action = "index" })" id="addScnt">
+                        <button type="button" class="btn btn-default btn-sm">Add Another Player</button>
+                    </a>
+                </p>
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-md-12">
                 <p>

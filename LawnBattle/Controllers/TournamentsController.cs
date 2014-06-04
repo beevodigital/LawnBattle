@@ -70,6 +70,8 @@ namespace LawnBattle.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(string eventSlug, [Bind(Include="ID,TournamentType,Name")] Tournament tournament)
         {
+            ViewBag.eventSlug = eventSlug;
+
             if (Request.Form["TournamentPlayers"] == null)
             {
                 ModelState.AddModelError("", "You must select at least 4 teams");

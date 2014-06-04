@@ -64,9 +64,12 @@ namespace LawnBattle.Controllers
                 //create a player for of the names entered
                 foreach (string ThisName in ThesePlayers)
                 {
-                    Player ThisPlayer = new Player { Name = ThisName, IsHuman = true, IsActive = true, Email = "", Event = GetEvent };
-                    db.Players.Add(ThisPlayer);
-                    db.SaveChanges();
+                    if(ThisName != "")
+                    {
+                        Player ThisPlayer = new Player { Name = ThisName, IsHuman = true, IsActive = true, Email = "", Event = GetEvent };
+                        db.Players.Add(ThisPlayer);
+                        db.SaveChanges();
+                    }
                 }
                 //player.Event = GetEvent;
                 //db.Players.Add(player);

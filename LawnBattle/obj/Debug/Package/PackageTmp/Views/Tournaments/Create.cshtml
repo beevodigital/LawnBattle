@@ -5,6 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script>
+    $(function () {
+        $('.checkall').on('click', function () {
+            $(':checkbox').prop('checked', this.checked);
+        });
+    });
+</script>
+
 <h2>Create</h2>
 
 
@@ -41,6 +49,11 @@
         <div class="form-group">
             <label class="control-label col-md-2">Who's Playing?</label>
             <div class="col-md-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="Checkall" class="checkall" value=""><strong>Everyone!</strong>
+                    </label>
+                </div>
                 @{
                     var GetPlayers = (List<LawnBattle.Models.Player>) ViewBag.Players;
                     

@@ -1,11 +1,11 @@
 ﻿@model LawnBattle.Models.Tournament
-@using System.Web.Script.Serialization; 
+@using System.Web.Script.Serialization;
 <ul>
-    
+
     @{
         List<object> TheTeams = new List<object>();
-        
-        foreach(var ThisGame in Model.Games)
+
+        foreach (var ThisGame in Model.Games)
         {
             List<LawnBattle.Helpers.TeamForJSBracket> Players = new List<LawnBattle.Helpers.TeamForJSBracket>();
             //work on the first team:
@@ -48,19 +48,37 @@
             }
             TheTeams.Add(Players);
         }
-        
+
         JavaScriptSerializer ThisJS = new JavaScriptSerializer();
 
         string TeamJson = ThisJS.Serialize(TheTeams);
-        
-    } 
+
+    }
 </ul>
 
 <div class="row">
     <div id="bracket">
         <script>
             function saveFn(data, userData) {
-                console.log("saving");
+                //ajax call to update the json
+                var data = JSON.stringify($('#bracket').bracket('data'));
+                $.ajax({
+                    url: userData,
+                    type:"POST",
+                    data: {JSONScore : data}
+                });
+
+                //are the last two scores filled out?
+                if(ResultsArray[ResultsArray.length -1].score != "--" && ResultsArray[ResultsArray.length -2].score != "--")
+                {
+                    alert('tourny over');
+                    //send to server and clear array for the next edit
+                    //tourny over!
+                }
+                else
+                {
+                    ResultsArray = [];
+                }
             }
 
             function matchClicked(data, arg2) {
@@ -82,19 +100,43 @@
                 container.append(data.Name);
             }
 
+            @{
+                 //check if we have results
+        string ResultsJson = "[[[[]]], [], []]";
+        if (Model.JSONstate != null && Model.JSONstate.Length > 3)
+        {
+            ResultsJson = HttpUtility.UrlDecode(Model.JSONstate);
+        }
+    }
+
             $(document).ready(function () {
-                var doubleElimination = {
-                    "teams":@Html.Raw(TeamJson)
-                        ,
-                    "results": [[[[]]]]
-                }
+                var doubleElimination =
+                    @if (Model.JSONstate != null && Model.JSONstate.Length > 3)
+                        {
+                            <text>
+                                @Html.Raw(ResultsJson)
+                            </text>
+                        }
+                    else
+                    {
+                        <text>
+                               {
+                                   "teams":@Html.Raw(TeamJson)
+                                       ,
+                                   "results": [[[[]]]]
+                               }
+                </text>
+                    }
+
+
+
 
                 $(function () {
                     $('#bracket').bracket({
                         skipConsolationRound: true,
                         init: doubleElimination,
                         save: saveFn,
-                        userData: "",
+                        userData: "@Url.RouteUrl("EventsTournaments", new { eventSlug = Model.Event.EventKey, action = "SaveJSON", id = Model.ID })",
                         decorator: {
                             edit: edit_fn,
                             render: render_fn
