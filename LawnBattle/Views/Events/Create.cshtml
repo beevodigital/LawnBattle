@@ -1,20 +1,20 @@
 ﻿@model LawnBattle.Models.Event
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Welcome To Lawn Battle";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Welcome!</h2>
-
+<hr />  
 
 @using (Html.BeginForm("ReRoute","Events"))
 {
-    @Html.AntiForgeryToken()
+    @*Html.AntiForgeryToken()*@
 
     <div class="form-horizontal">
-        <h4>Have a event code? Enter it below</h4>
-        <hr />
+        <h4>Know your event name?</h4>
+        <h5>Is your event already created? If so, enter the name of the event created below</h5>
         @Html.ValidationSummary(true)
 
         <div class="form-group">
@@ -35,12 +35,11 @@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
+    @*Html.AntiForgeryToken()*@
 
     <div class="form-horizontal">
-        <h4>Don't have acode?</h4>
-        <h5>Looking to create an event? Think of an event name and enter it below</h5>
-        <hr />
+        <h4>Don't have an event yet?</h4>
+        <h5>Not a problem! Think of an event name and enter it below</h5>
         @Html.ValidationSummary(true)
 
         <div class="form-group">

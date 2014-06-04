@@ -14,6 +14,7 @@
             $('#PlayerContainer .player-block').first().clone().appendTo("#PlayerContainer");
 
             $('#PlayerContainer .player-block').last().find('input').val('');
+            $('#PlayerContainer .player-block').last().find('input').focus();
             $('#PlayerContainer label').last().hide();
             return false;
         });

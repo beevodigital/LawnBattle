@@ -9,6 +9,17 @@
     $(function () {
         $('.checkall').on('click', function () {
             $(':checkbox').prop('checked', this.checked);
+
+            $(':checkbox.player').each(function () {
+                if ($(this).is(':checked')) {
+                    $(this).parent().removeClass("label-default");
+                    $(this).parent().addClass("label-primary");
+                } else {
+                    $(this).parent().removeClass("label-primary");
+                    $(this).parent().addClass("label-default");
+                }
+            });
+
             var NumberOfPlayers = $(':checkbox:checked.player').length;
 
             if (NumberOfPlayers < 4) {
@@ -21,7 +32,17 @@
     });
 
     $(function () {
-        $(':checkbox').change(function () {
+        $(':checkbox.player').change(function () {
+            console.log(this);
+            if ($(this).is(':checked'))
+            {
+                $(this).parent().addClass("label-primary");
+                $(this).parent().removeClass("label-default");
+            } else {
+                $(this).parent().addClass("label-default");
+                $(this).parent().removeClass("label-primary");
+            }
+
             var NumberOfPlayers = $(':checkbox:checked.player').length;
 
             if(NumberOfPlayers < 4)
@@ -85,9 +106,11 @@
                     foreach(var ThisPlayer in GetPlayers)
                     {
                         <div class="checkbox">
-                            <label>
-                                <input type="checkbox" class="player" name="TournamentPlayers" value="@ThisPlayer.ID">@ThisPlayer.Name
-                            </label>
+                            <h4 style="margin-top:2px;margin-bottom:2px;">
+                                <label class="label label-default">
+                                    <input type="checkbox" class="player label" name="TournamentPlayers" value="@ThisPlayer.ID">@ThisPlayer.Name
+                                </label>
+                            </h4>
                         </div>
                     }
                 }

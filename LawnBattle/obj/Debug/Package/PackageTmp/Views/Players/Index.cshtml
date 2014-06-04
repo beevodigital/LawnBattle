@@ -36,10 +36,14 @@
     </div>
 </div>
 
+@{
+    int TournyCount = (int)ViewBag.TournyCount;
+
+}
 <div class="row">
     <div class="col-md-12">
         <a href="@Url.RouteUrl("EventSlug", new { id = ViewBag.eventSlug })">
-            <button type="button" class="btn btn-info btn-block">Back to Home</button>
+            <button type="button" class="btn btn-info btn-block">@((TournyCount < 1 && Model.Count() > 3) ? "Create Your First Tournament" : "Back To Event")</button>
         </a>
     </div>
 </div>

@@ -18,6 +18,17 @@ namespace LawnBattle.Controllers
         public ActionResult Index(string eventSlug)
         {
             ViewBag.eventSlug = eventSlug;
+
+            int TournyCount = 0;
+            var GetEvent = db.Events.Where(x => x.EventKey.Equals(eventSlug)).Include("Tournaments").FirstOrDefault();
+            if (GetEvent != null)
+            {
+                if (GetEvent.Tournaments != null)
+                    TournyCount = GetEvent.Tournaments.Count;
+            }
+
+            ViewBag.TournyCount = TournyCount;
+
             return View(db.Players.Where(x => x.Event.EventKey.Equals(eventSlug)).ToList());
         }
 
